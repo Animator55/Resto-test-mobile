@@ -15,17 +15,17 @@ const defaultTables: TablesType = {
 let lastChange: string | undefined
 
 
-const checkTableExist = (Tables: TablesType, number: string)=>{
-  let result : boolean = false
+// const checkTableExist = (Tables: TablesType, number: string)=>{
+//   let result : boolean = false
 
-  for(const key in Tables) {
-      if(Tables[key].number === Number(number)) {
-          result = true
-          break
-      }
-  }    
-  return result
-}
+//   for(const key in Tables) {
+//       if(Tables[key].number === Number(number)) {
+//           result = true
+//           break
+//       }
+//   }    
+//   return result
+// }
 
 export default function App() {
   const [paydisplay, setDisplay] = React.useState<undefined | any>(undefined)
@@ -81,7 +81,7 @@ export default function App() {
     for(let i=0; i<table.length; i++) {
       total += table[i].price * table[i].amount!
       let amount = table[i].amount === 1 ? "" : "(" +table[i].amount + " X "
-      let subtotal = table[i].amount === 1 ? "" : ") $"+ table[i].amount * table[i].price 
+      let subtotal = table[i].amount === 1 ? "" : ") $"+ table[i].amount! * table[i].price 
       result = {...result, [table[i].name] : amount +"$" + table[i].price + subtotal}
     }
 

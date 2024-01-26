@@ -1,21 +1,23 @@
 import React from 'react'
 import { Item, Table, pagesRouter } from '../vite-env'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowCircleLeft, faArrowLeft, faBottleWater, faCheck, faCookie, faDrumstickBite, faIceCream, faMartiniGlassCitrus, faMinus, faPlateWheat, faPlus, faSeedling, faTrash, faWheatAlt, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faArrowCircleLeft, faBottleWater, faCheck, faCookie, faDrumstickBite, faIceCream, faMartiniGlassCitrus, faMinus, faPlateWheat, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { products } from '../assets/products'
 
 type Props = {
     Table: Table | undefined
     editTable: Function
 }
+type resRoute = {
+    [key: number]: any
+}
 
-let lastChange 
+let lastChange: undefined | any = undefined
 
 export default function TableBuys({Table, editTable}: Props) {
     const [productsVis, setProductsVis] = React.useState<boolean>(false)
     const [selectedProds, setSelectedProds] = React.useState<Item[]>([])
     const [ProductPage, setProductPage] = React.useState("Entrada")
-    const picker = React.useRef<HTMLElement | null>(null)
 
     const pages: pagesRouter = {
         "Entrada": faCookie,
@@ -37,7 +39,7 @@ export default function TableBuys({Table, editTable}: Props) {
     }
 
     
-    const checkItemBuy = (buys: Item[], id: string): boolean | number[]=>{
+    const checkItemBuy = (buys: Item[], id: string)=>{
         let index = 0
         let boolean = false
         for(let i=0; i<buys.length;i++) {
@@ -48,7 +50,7 @@ export default function TableBuys({Table, editTable}: Props) {
             }
         }
 
-        return [boolean, index]
+        return [boolean as boolean, index as number]
     }
 
     const changeAmount = (item: Item, index: number, add: number)=>{
@@ -65,17 +67,17 @@ export default function TableBuys({Table, editTable}: Props) {
         editTable("buys", newValue, item._id, [[item.name, add > 0 ? "+1" : "-1"]])
     }
 
-    const addItem = (item: Item, amount: number | undefined)=>{
-        if(Table === undefined) return
+    // const addItem = (item: Item, amount: number | undefined)=>{
+    //     if(Table === undefined) return
 
-        let localmount = !amount ? 1: amount
-        let buyedItem: Item = {...item, amount: localmount}
-        let [results, index] = checkItemBuy(Table.buys, buyedItem._id)
-        if(Table.buys.length !== 0 && results) changeAmount(Table.buys[index as number], index as number, localmount)
-        else {
-            editTable("buys", [...Table.buys, buyedItem], buyedItem._id, true)
-        }
-    }
+    //     let localmount = !amount ? 1: amount
+    //     let buyedItem: Item = {...item, amount: localmount}
+    //     let [results, index] = checkItemBuy(Table.buys, buyedItem._id)
+    //     if(Table.buys.length !== 0 && results) changeAmount(Table.buys[index as number], index as number, localmount)
+    //     else {
+    //         editTable("buys", [...Table.buys, buyedItem], buyedItem._id, true)
+    //     }
+    // }
 
     const ProductList = ()=>{
         return <div>
@@ -115,11 +117,13 @@ export default function TableBuys({Table, editTable}: Props) {
         let newBuys = [...Table.buys]
         for(let i=0; i < selectedProds.length; i++) {
             let item = selectedProds[i]
-            let [results, index] = checkItemBuy(Table.buys, item._id)
+            let res: resRoute = [checkItemBuy(Table.buys, item._id)]
+            let results = res[0][0] as boolean
+            let index = res[1][1] as number 
 
             if(Table.buys.length !== 0 && results) {
                 let newAmount = Table.buys[index].amount! + item.amount!
-                newBuys = Object.values({...Table.buys, [index]: {...item, amount: newAmount}}) 
+                newBuys = Object.values({...Table.buys, [index]: {...item, amount: newAmount}}) as Item[]
             }
             else {
                 newBuys = [...newBuys, item]
@@ -139,7 +143,7 @@ export default function TableBuys({Table, editTable}: Props) {
         
         //delete if amount is 0
         let newValue = newAmount !== 0 ?  
-        Object.values({...selectedProds, [index]: {...item, amount: newAmount}}) 
+        Object.values({...selectedProds, [index]: {...item, amount: newAmount}}) as Item[]
         : selectedProds.filter((item, i)=>{
             if(i !== index) return item
         })
@@ -148,9 +152,12 @@ export default function TableBuys({Table, editTable}: Props) {
     }
 
     const addItemToSelected = (item: Item, amount: number)=>{
-        if(Table === undefined || !picker.current) return
+        if(Table === undefined) return
         let buyedItem: Item = {...item, amount: 1}
-        lastChange = picker.current.scrollTop
+
+        let picker=  document.getElementById('product-picker')
+        if(!picker) return
+        lastChange = picker.scrollTop
         let [results, index] = checkItemBuy(selectedProds, buyedItem._id)
         if(selectedProds.length !== 0 && results && amount) changeSelectedAmount(selectedProds[index as number], index as number, amount)
         else {
@@ -164,13 +171,13 @@ export default function TableBuys({Table, editTable}: Props) {
             return <div
                 key={Math.random()}
                 id={item._id}
-                onClick={()=>{if(!boolean) addItemToSelected(item)}}
+                onClick={()=>{if(!boolean) addItemToSelected(item, 1)}}
                 className={boolean ? 'pickeable-item selected' :'pickeable-item'}
             >
                 {boolean ? <>
                 <button onClick={()=>{addItemToSelected(item, -1)}}><FontAwesomeIcon icon={faMinus}/></button>
                 <div>
-                    <div>{selectedProds[index].amount + " X $" + selectedProds[index].price}</div>
+                    <div>{selectedProds[index as number].amount + " X $" + selectedProds[index as number].price}</div>
                     <p>{item.name}</p>
                 </div>
                 <button onClick={()=>{addItemToSelected(item, 1)}}><FontAwesomeIcon icon={faPlus}/></button>
@@ -207,7 +214,7 @@ export default function TableBuys({Table, editTable}: Props) {
         }
         return <section className='picker-section'>
             <Router/>
-            <div className='product-picker' ref={picker}>
+            <div className='product-picker' id='product-picker'>
                 {Table !== undefined && RenderProducts(ProductPage)}
             </div>
             <button 
@@ -222,9 +229,11 @@ export default function TableBuys({Table, editTable}: Props) {
     }
 
     React.useEffect(()=>{
-        if(lastChange === undefined || selectedProds.length === 0 || !picker.current ) return
-    
-        picker.current.scrollTo({left: 0, top: lastChange})
+        if(lastChange === undefined || selectedProds.length === 0 ) return
+
+        let picker=  document.getElementById('product-picker')
+        if(!picker) return
+        picker.scrollTo({left: 0, top: lastChange})
         lastChange = undefined
     }, [selectedProds])
     

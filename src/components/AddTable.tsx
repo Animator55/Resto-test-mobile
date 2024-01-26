@@ -26,7 +26,8 @@ export default function AddTable({close, confirm}: Props) {
     }
     
     return <div className='pop-background' onClick={(e)=>{
-            if(e.target && e.target.className === "pop-background") close()
+            let el = e.target as HTMLElement
+            if(el.className! === "pop-background") close()
         }}>
         <div className='pop'>
             <h2>Añadir mesa</h2>

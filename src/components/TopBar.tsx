@@ -1,4 +1,4 @@
-import { faDatabase, faList, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { Table } from "../vite-env"

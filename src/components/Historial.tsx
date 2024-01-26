@@ -1,5 +1,4 @@
-import React from 'react'
-import { Table, TablesType } from '../vite-env'
+import { Table } from '../vite-env'
 
 type Props = {
     historial: Table | undefined

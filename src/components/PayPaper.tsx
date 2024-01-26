@@ -40,7 +40,8 @@ export default function PayPaper({ content, close }: Props) {
     let date =new Date()
 
     return <div className='pop-background' onClick={(e)=>{
-        if(e.target && e.target.className === "pop-background") close()
+        let el = e.target as HTMLElement
+        if(el.className! === "pop-background") close()
     }}>
         <div className='pop'>
             <div className='d-flex'>
