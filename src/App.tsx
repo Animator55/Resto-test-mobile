@@ -4,7 +4,6 @@ import TablesList from './components/TablesList'
 import TableBuys from './components/TableBuys'
 import { TablesType, pagesRouter } from './vite-env'
 import TopBar from './components/TopBar'
-import ProductList from './components/ProductList'
 import Historial from './components/Historial'
 import AddTable from './components/AddTable'
 import PayPaper from './components/PayPaper'
@@ -101,7 +100,6 @@ export default function App() {
       }} 
       />,
     "table": <TableBuys editTable={editTable} Table={selectedTable !== undefined ? Tables[selectedTable] : undefined}/>,
-    "products": <ProductList />,
     "historial": <Historial 
       historial={selectedHistorial !== undefined  ? Tables[selectedHistorial] : undefined}
     />
