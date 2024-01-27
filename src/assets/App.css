@@ -87,6 +87,20 @@ input {
   opacity: 0.3;
 }
 
+.copied {
+  background-color: var(--cgreen)!important;
+  color: var(--cblack)!important;
+}
+.copied::after {
+  content: "✔";
+  position: relative;
+  margin-left: 0.5rem;
+}
+
+.mr-auto {
+  margin-right: auto!important;
+}
+
 /***/
 
 .topbar {
@@ -96,13 +110,17 @@ input {
    display: flex;
    align-items: center;
    padding: 0 0.5rem;
-   justify-content: space-between;
+   gap: 1rem;
 }
 .topbar > button {
   background-color: transparent;
   font-size: 1.2rem;
   color: var(--cwhite );
 }
+.topbar > button:nth-child(2) {
+  margin-right: auto;
+}
+
 .add-table, .pay {
   background-color: var(--cblack)!important;
   color: var(--cwhite);
@@ -204,7 +222,7 @@ input {
 
 .table-buys-top {
   display: grid;
-  grid-template-columns: 35% 25% 25% 7%;
+  grid-template-columns: 7% 35% 10% 25% 15%;
   gap: 2%;
   border-radius: 10px;
   margin: 0.3rem;
@@ -215,7 +233,8 @@ input {
 }
 .table-buys-item, .table-buys-total {
   display: grid;
-  grid-template-columns: 35% 25% 25% 7%;
+  align-items: center;
+  grid-template-columns: 7% 35% 10% 25% 15%;
   gap: 2%;
   border-radius: 10px;
   padding: 0.4rem 0.6rem;
@@ -245,26 +264,27 @@ input {
 
 .item-options {
   display: flex;
-  justify-content: center;
   gap: 0.5rem;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .item-options > button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
-  color: var(--cwhite);
-  border-radius: 50%;
-  padding: 0 0.25rem;
+  background-color: var(--cgreen);
+  color: var(--cblack);
+  border-radius: 5px;
+  padding: 0.4rem;
   transition: background-color 200ms, scale 300ms;
 }
-.item-options > button:hover {
+/* .item-options > button:hover {
   background-color: var(--cdarkgray);
   border-radius: 50%;
   scale: 1.2;
   transition: background-color 200ms, scale 300ms;
-}
+} */
 
 .table-buys-total {
   margin-top: auto;

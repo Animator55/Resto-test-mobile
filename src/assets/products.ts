@@ -133,6 +133,12 @@ export const products: productsType = {
             type: "Postres"
         },
         {
+            _id: "d.004",
+            name: "Bocha de Helado",
+            price: 1400,
+            type: "Postres"
+        },
+        {
             _id: "d.001",
             name: "Flan Mixto",
             price: 2500,
@@ -207,6 +213,82 @@ export const products: productsType = {
           price: 2400,
           name: "Jameson",
           type: "Bebidas"
+        },
+    ],
+    "Vinos": [
+        {
+          _id: "v.000",
+          price: 13000,
+          name: "Piatelli",
+          type: "Vinos"
+        },
+        {
+          _id: "v.001",
+          price: 10000,
+          name: "Animal Org.",
+          type: "Vinos"
+        },
+        {
+          _id: "v.002",
+          price: 8900,
+          name: "La Anita",
+          type: "Vinos"
+        },
+        {
+          _id: "v.003",
+          price: 9800,
+          name: "Nicasia",
+          type: "Vinos"
+        },
+        {
+          _id: "v.004",
+          price: 6700,
+          name: "La Iride",
+          type: "Vinos"
+        },
+
+        {
+          _id: "v.005",
+          price: 9800,
+          name: "Nicasia Blanc Viognier",
+          type: "Vinos"
+        },
+
+        {
+          _id: "v.006",
+          price: 10600,
+          name: "La Anita Chardonnay",
+          type: "Vinos"
+        },
+        {
+          _id: "v.007",
+          price: 6000,
+          name: "Santa Julia",
+          type: "Vinos"
+        },
+        {
+          _id: "v.008",
+          price: 0,
+          name: "Espumante",
+          type: "Vinos"
+        },
+        {
+          _id: "v.009",
+          price: 5900,
+          name: "Alto a las H. (Botella)",
+          type: "Vinos"
+        },
+        {
+          _id: "v.010",
+          price: 2000,
+          name: "Alto a las H (Copa)",
+          type: "Vinos"
+        },
+        {
+          _id: "v.011",
+          price: 2000,
+          name: "Santa Julia (Copa)",
+          type: "Vinos"
         },
     ],
     "Tragos": [

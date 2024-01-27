@@ -133,7 +133,7 @@ export default function App() {
     setPage("table")
   }, [selectedTable])
 
-  return <main>
+  return <main id='main'>
     <section className='content'>
       <section className='sub-content'>
         {paydisplay !== undefined && <PayPaper content={paydisplay} close={()=>{setDisplay(undefined)}}/>}

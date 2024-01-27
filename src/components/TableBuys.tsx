@@ -1,8 +1,9 @@
 import React from 'react'
 import { Item, Table, pagesRouter } from '../vite-env'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowCircleLeft, faBottleWater, faCheck, faCookie, faDrumstickBite, faIceCream, faMartiniGlassCitrus, faMinus, faPlateWheat, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowCircleLeft, faBottleWater, faCheck, faCookie, faDrumstickBite, faIceCream, faMartiniGlassCitrus, faMinus, faPen, faPlateWheat, faPlus, faTrash, faWineBottle } from '@fortawesome/free-solid-svg-icons'
 import { products } from '../assets/products'
+import EditItemPop from './EditItemPop'
 
 type Props = {
     Table: Table | undefined
@@ -18,6 +19,7 @@ export default function TableBuys({Table, editTable}: Props) {
     const [productsVis, setProductsVis] = React.useState<boolean>(false)
     const [selectedProds, setSelectedProds] = React.useState<Item[]>([])
     const [ProductPage, setProductPage] = React.useState("Entrada")
+    const [editPopUp, setEditPopUp] = React.useState<number | undefined>(undefined)
 
     const pages: pagesRouter = {
         "Entrada": faCookie,
@@ -25,6 +27,7 @@ export default function TableBuys({Table, editTable}: Props) {
         "Principal": faDrumstickBite,
         "Postres": faIceCream,
         "Bebidas": faBottleWater,
+        "Vinos": faWineBottle,
         "Tragos": faMartiniGlassCitrus,
     }
 
@@ -79,17 +82,42 @@ export default function TableBuys({Table, editTable}: Props) {
     //     }
     // }
 
+    const editItem = (item: Item, input1:string, input2:string)=>{
+        if(Table === undefined) return
+
+        let res: resRoute = [checkItemBuy(Table.buys, item._id)]
+
+        let results = res[0][0] as boolean
+        let index = res[0][1] as number 
+
+        let newPrice = input2 !== "" ? Number(input2) : Table.buys[index].price
+        let newAmount = input1 !== "" ? Number(input1) : Table.buys[index].amount
+ 
+        let newBuys = [...Table.buys]
+        if(results) {
+            newBuys = Object.values({...Table.buys, [index]: {...item, amount: newAmount, price: newPrice}}) as Item[]
+        }
+        
+        let changedPrice = Table.buys[index].price !== newPrice ? Table.buys[index].price +" > " + input2: ""
+        let changedAmount = Table.buys[index].amount !== newAmount ? Table.buys[index].amount +" > " + input1: ""
+
+        editTable("buys", newBuys, undefined, [[item.name, changedAmount + "/" + changedPrice]])
+        setEditPopUp(undefined)
+    }
+
     const ProductList = ()=>{
         return <div>
             <nav className='table-buys-top'>
+                <p></p>
                 <p>Producto</p>
-                <p>Unidades</p>
+                <p>Uni.</p>
                 <p>Precio</p>
             </nav>
             <div className='table-buys'>
                 <ul>
                     {Table !== undefined && Table.buys.map((item, i)=>{
                         return <li className='table-buys-item' id={item._id} key={Math.random()}>
+                            <button onClick={()=>{setEditPopUp(i)}}><FontAwesomeIcon icon={faPen}/></button>
                             <p>{item.name}</p>
                             <p>{item.amount}</p>
                             <p>{item.price}</p>
@@ -101,6 +129,7 @@ export default function TableBuys({Table, editTable}: Props) {
                     })}
                 </ul>
                 <li className='table-buys-total' key={Math.random()}>
+                    <p></p>
                     <p>Total</p>
                     <p></p>
                     <p>{calculateTotal()}</p>
@@ -118,8 +147,9 @@ export default function TableBuys({Table, editTable}: Props) {
         for(let i=0; i < selectedProds.length; i++) {
             let item = selectedProds[i]
             let res: resRoute = [checkItemBuy(Table.buys, item._id)]
+
             let results = res[0][0] as boolean
-            let index = res[1][1] as number 
+            let index = res[0][1] as number 
 
             if(Table.buys.length !== 0 && results) {
                 let newAmount = Table.buys[index].amount! + item.amount!
@@ -239,6 +269,7 @@ export default function TableBuys({Table, editTable}: Props) {
     
     return <section className='table-display'>
         {!productsVis ? <div>
+            {editPopUp !== undefined && <EditItemPop item={Table?.buys[editPopUp]} close={()=>{setEditPopUp(undefined)}} confirm={editItem}/>}
             <ProductList/>
             <button 
                 className='add-product'

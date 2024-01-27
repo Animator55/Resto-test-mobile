@@ -1,4 +1,4 @@
-import { faList, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faExpand, faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { Table } from "../vite-env"
@@ -28,10 +28,20 @@ export default function TopBar({closeAll, TableList, page, pay, selectedTable, s
       </div>
     </section>
   }
+  
+  const fullscreen = ()=>{
+    let elem = document.getElementById('main')
+    if(!elem) return
+    if(elem.requestFullscreen) elem.requestFullscreen()
+    // else if(elem.webkitRequestFullscreen) elem.webkitRequestFullscreen()
+  }
   return <nav className="topbar">
     {pop && <ClosePopUp/>}
     <button onClick={()=>{TableList()}}>
       <FontAwesomeIcon icon={faList}/>
+    </button>
+    <button onClick={()=>{fullscreen()}}>
+      <FontAwesomeIcon icon={faExpand}/>
     </button>
     {page === "table" && <>
       <h4>{selectedTable !== undefined && "Mesa " + selectedTable.number}</h4>
