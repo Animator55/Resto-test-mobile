@@ -33,6 +33,7 @@ export default function App() {
   const [Tables, setTables] = React.useState(defaultTables)
   const [selectedTable, setSelected] = React.useState<string | undefined>()
   const [selectedHistorial, setSelectedHis] = React.useState<string | undefined>()
+  const [filter, setFilter]= React.useState<string>("active")
   
   const editTable = (key: string, value: any, id: string | undefined, change: string[])=>{
     if(selectedTable === undefined) return
@@ -68,9 +69,17 @@ export default function App() {
     setSelected(id)
   }
 
-  const closeAll = (save: boolean)=>{
-    console.log(save)
+  const save = ()=>{
+    let storage = window.localStorage
+    for(const id in Tables) {
+      let value = JSON.stringify(Tables[id])
+      storage.setItem(id, value);
+    }
   }
+  const archivate = (id: string, boolean: boolean)=>{
+    setTables({...Tables, [id]: {...Tables[id], state: boolean ? "active":"deleted"}})
+  }
+  
   const pay = ()=>{
     if(!selectedTable || Tables[selectedTable].buys.length === 0) return
 
@@ -97,7 +106,9 @@ export default function App() {
       OpenHistorial={(id: string)=>{
         setSelectedHis(id)
         setPage("historial")
-      }} 
+      }}
+      archivate={archivate} 
+      filter={filter}
       />,
     "table": <TableBuys editTable={editTable} Table={selectedTable !== undefined ? Tables[selectedTable] : undefined}/>,
     "historial": <Historial 
@@ -133,18 +144,32 @@ export default function App() {
     setPage("table")
   }, [selectedTable])
 
+  React.useEffect(()=>{
+    if(window.localStorage.length === 0 || Object.keys(Tables).length !== 0) return 
+    let result = {}
+    let storage = window.localStorage
+    for(const key in storage) {
+      if(key === "length" ) break
+      let value = JSON.parse(storage[key])
+      result = {...result, [key]: value}
+    }
+    setTables(result)
+  }, [])
+
   return <main id='main'>
     <section className='content'>
       <section className='sub-content'>
         {paydisplay !== undefined && <PayPaper content={paydisplay} close={()=>{setDisplay(undefined)}}/>}
         {popUp && <AddTable close={()=>{setPopUp(false)}} confirm={handleCreateTable}/>}
         <TopBar 
-          closeAll={closeAll} 
+          save={save} 
           TableList={()=>{setPage("list"); setSelected(undefined)}}
           page={page}
           selectedTable={selectedTable !== undefined ? Tables[selectedTable]: undefined}
           setPopUp={setPopUp}
           pay={pay}
+          toggleFilter={()=>{setFilter(filter === "active" ? "deleted" : "active")}}
+          filter={filter}
         />
         {pages[page]}
       </section>

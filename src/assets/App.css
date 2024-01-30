@@ -8,6 +8,7 @@ body {
   --clightgray: #a4a9ad;
   --cwhite: #ccd2d6;
   --cgreen: #6bd674;
+  --cred: #d66b6b;
 }
 
 * {
@@ -121,7 +122,7 @@ input {
   margin-right: auto;
 }
 
-.add-table, .pay {
+.add-table, .pay, .toggle-filter, .save {
   background-color: var(--cblack)!important;
   color: var(--cwhite);
   border-radius: 4px;
@@ -131,7 +132,7 @@ input {
   padding: 0.5rem;
   font-size: 1rem!important;
 }
-.add-table > p {
+.add-table > p, .toggle-filter > p, .save > p {
   font-size: 0.8rem;
 }
 
@@ -241,6 +242,13 @@ input {
   background-color: var(--cblack);
 }
 
+.table-buys-item > button {
+  height: 100%;
+}
+.table-buys-item.edited > button {
+  background-color: var(--cgreen);
+}
+
 .table-buys-item > p {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -278,6 +286,9 @@ input {
   border-radius: 5px;
   padding: 0.4rem;
   transition: background-color 200ms, scale 300ms;
+}
+.item-options > button:first-of-type {
+  background-color: var(--cred);
 }
 /* .item-options > button:hover {
   background-color: var(--cdarkgray);
@@ -318,6 +329,7 @@ input {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
+  overflow: hidden;
 }
 
 .picker-nav {
@@ -342,6 +354,7 @@ input {
 
 .picker-nav > button:last-child {
   margin-left: auto;
+  color: var(--cred);
 }
 
 .content:has(.sidebar.expanded) .picker-nav > button > :last-child {
@@ -371,7 +384,6 @@ input {
   overflow-x: hidden;
   position: relative;
 }
-
 .pickeable-item{
   padding: 0.5rem;
   background-color: var(--cgray);
@@ -389,26 +401,26 @@ input {
 .pickeable-item > *:last-child {
   margin-left: auto;
 }
-.pickeable-item:not(.selected):hover {
+/* .pickeable-item:not(.selected):hover {
   background-color: var(--cdarkgray);
-}
+} */
 .pickeable-item > *:first-child {
-  opacity: 0.3;
+  /* opacity: 0.3; */
   color: var(--cblack);
-  transition: color 300ms;
+  /* transition: color 300ms; */
 }
-.pickeable-item:hover > *:first-child {
+/* .pickeable-item:hover > *:first-child {
   opacity: 1;
   color: var(--cgreen);
   transition: color 300ms;
-}
-.pickeable-item > *:nth-child(2) {
+} */
+/* .pickeable-item > *:nth-child(2) {
   transition: scale 300ms;
 }
 .pickeable-item:hover > *:nth-child(2) {
   scale: 1.2;
   transition: scale 300ms;
-}
+} */
 
 .pickeable-item.selected > div {
   margin: 0 auto;
@@ -418,11 +430,15 @@ input {
 .pickeable-item.selected > button {
   background-color: var(--cgreen);
   color: var(--cblack);
+  box-shadow: 0 0 3px var(--cblack);
   padding: 0 1rem;
   height: 100%;
   border-radius: 4px;
   margin: 0;
   opacity: 1;
+}
+.pickeable-item.selected > button:first-of-type {
+  background-color: var(--cred);
 }
 
 /* TABLES LIST SIDEBAR */
@@ -472,6 +488,7 @@ input {
   display: flex;
   align-items: center;
   cursor: pointer;
+  gap:0.5rem;
 }
 
 .table-button h6{

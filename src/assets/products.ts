@@ -64,27 +64,27 @@ export const products: productsType = {
             _id: "m.008",
             name: "Mont. Pera",
             price: 4800,
-            type: "Entrada",
+            type: "Montadito",
             tags: ["vegan"]
         },
         {
             _id: "m.009",
             name: "Mont. Tomate",
             price: 4800,
-            type: "Entrada",
+            type: "Montadito",
             tags: ["vegan"]
         },
         {
             _id: "m.010",
             name: "Mont. Jamón",
             price: 4900,
-            type: "Entrada"
+            type: "Montadito"
         },
         {
             _id: "m.011",
             name: "Mont. Brie",
             price: 4700,
-            type: "Entrada"
+            type: "Montadito"
         },
     ],
     "Principal": [

@@ -2,17 +2,21 @@ import { faExpand, faList, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { Table } from "../vite-env"
+import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder"
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons/faFloppyDisk"
 
 type Props = {
-  closeAll: Function
+  save: Function
   TableList: Function
   page: string 
   pay: Function
   selectedTable: Table | undefined
   setPopUp: Function
+  toggleFilter: Function
+  filter: string
 }
 
-export default function TopBar({closeAll, TableList, page, pay, selectedTable, setPopUp}: Props) {
+export default function TopBar({save, TableList, page, pay, selectedTable, setPopUp, toggleFilter, filter}: Props) {
   const [pop, setPop] = React.useState<boolean>(false)
 
   const ClosePopUp = ()=>{
@@ -21,8 +25,7 @@ export default function TopBar({closeAll, TableList, page, pay, selectedTable, s
         <h2>Cerrar Registro</h2>
         <hr/>
         <div>
-          <button onClick={()=>{closeAll(true)}}>Guardar y cerrar</button>
-          <button onClick={()=>{closeAll(false)}}>No guardar y cerrar</button>
+          <button onClick={()=>{save()}}>Guardar </button>
           <button onClick={()=>{setPop(false)}}>Cancelar</button>
         </div>
       </div>
@@ -48,10 +51,20 @@ export default function TopBar({closeAll, TableList, page, pay, selectedTable, s
       <button className={selectedTable?.buys.length !== 0 ? "pay" : "pay disabled"} onClick={()=>{pay()}}>Cobrar</button>
     </>
     }
-    {page === "list" && <button className="add-table" onClick={()=>{setPopUp(true)}}>
-      <FontAwesomeIcon icon={faPlus}/>
-      <p>Añadir Mesa</p>
-    </button>}
+    {page === "list" && <>
+      <button className="save" onClick={()=>{save()}}>
+        <FontAwesomeIcon icon={faFloppyDisk}/>
+        <p>Guardar</p>
+      </button>
+      <button className="toggle-filter" onClick={()=>{toggleFilter()}}>
+        <FontAwesomeIcon icon={faFolder}/>
+        <p>{filter === "active" ? "Activas" : "Borradas"}</p>
+      </button>
+      <button className="add-table" onClick={()=>{setPopUp(true)}}>
+        <FontAwesomeIcon icon={faPlus}/>
+      </button>
+    </>
+    }
     {/* <button onClick={()=>{}}>
       <FontAwesomeIcon icon={faDatabase}/>
     </button> */}

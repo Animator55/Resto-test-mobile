@@ -92,10 +92,13 @@ export default function TableBuys({Table, editTable}: Props) {
 
         let newPrice = input2 !== "" ? Number(input2) : Table.buys[index].price
         let newAmount = input1 !== "" ? Number(input1) : Table.buys[index].amount
- 
+        
+        let splitedID = item._id.split(".")
+        let newID = splitedID.length === 2 ? item._id + ".e" + `${Math.round(Math.random()*1000)}` : item._id
+        
         let newBuys = [...Table.buys]
         if(results) {
-            newBuys = Object.values({...Table.buys, [index]: {...item, amount: newAmount, price: newPrice}}) as Item[]
+            newBuys = Object.values({...Table.buys, [index]: {...item, _id: newID, amount: newAmount, price: newPrice}}) as Item[]
         }
         
         let changedPrice = Table.buys[index].price !== newPrice ? Table.buys[index].price +" > " + input2: ""
@@ -103,6 +106,13 @@ export default function TableBuys({Table, editTable}: Props) {
 
         editTable("buys", newBuys, undefined, [[item.name, changedAmount + "/" + changedPrice]])
         setEditPopUp(undefined)
+    }
+
+    const checkEdited = (item: Item)=>{
+        if(!item) return 'table-buys-item'
+        let id = item._id.split(".")
+        if(id.length === 3) return 'table-buys-item edited'
+        return 'table-buys-item'
     }
 
     const ProductList = ()=>{
@@ -116,14 +126,14 @@ export default function TableBuys({Table, editTable}: Props) {
             <div className='table-buys'>
                 <ul>
                     {Table !== undefined && Table.buys.map((item, i)=>{
-                        return <li className='table-buys-item' id={item._id} key={Math.random()}>
+                        return <li className={checkEdited(item)} id={item._id} key={Math.random()}>
                             <button onClick={()=>{setEditPopUp(i)}}><FontAwesomeIcon icon={faPen}/></button>
                             <p>{item.name}</p>
                             <p>{item.amount}</p>
                             <p>{item.price}</p>
                             <div className='item-options'>
-                                <button onClick={()=>{changeAmount(item, i, 1)}}><FontAwesomeIcon icon={faPlus}/></button>
                                 <button onClick={()=>{changeAmount(item, i, -1)}}><FontAwesomeIcon icon={faMinus}/></button>
+                                <button onClick={()=>{changeAmount(item, i, 1)}}><FontAwesomeIcon icon={faPlus}/></button>
                             </div>
                         </li>
                     })}
@@ -207,7 +217,10 @@ export default function TableBuys({Table, editTable}: Props) {
                 {boolean ? <>
                 <button onClick={()=>{addItemToSelected(item, -1)}}><FontAwesomeIcon icon={faMinus}/></button>
                 <div>
-                    <div>{selectedProds[index as number].amount + " X $" + selectedProds[index as number].price}</div>
+                    <div>
+                        <b style={{color: "var(--cgreen)"}}>{selectedProds[index as number].amount}</b> 
+                        {" X $" + selectedProds[index as number].price}
+                    </div>
                     <p>{item.name}</p>
                 </div>
                 <button onClick={()=>{addItemToSelected(item, 1)}}><FontAwesomeIcon icon={faPlus}/></button>
@@ -227,10 +240,14 @@ export default function TableBuys({Table, editTable}: Props) {
         const Router = ()=>{
             return <nav className='picker-nav'>
                 {Object.keys(pages).map(page=>{
+                    let bool = selectedProds.some(it=>{
+                        return it.type === page
+                    })
                     return <button 
                         key={Math.random()}
                         className={ProductPage === page ? "active" : ""}
                         onClick={()=>{setProductPage(page)}}
+                        style={bool ? {color: "var(--cgreen)"}:{}}
                     >
                         <FontAwesomeIcon icon={pages[page]}/>
                         <p>{page}</p>
@@ -242,9 +259,37 @@ export default function TableBuys({Table, editTable}: Props) {
                 </button>
             </nav>
         }
+        const drag = (e: React.TouchEvent<HTMLDivElement>)=>{
+            console.log("touchstart", e)
+
+            let initialX = e.touches[0].pageX
+            let indexPages = Object.keys(pages)
+            let actual =indexPages.indexOf(ProductPage)
+            let nex = actual+1 === indexPages.length ? indexPages[actual] : indexPages[actual+1]
+            let prev = actual-1 < 0 ? indexPages[0] : indexPages[actual-1]
+
+            const move = (e2: TouchEvent)=>{
+                if(e2.touches[0].clientX + 100 < initialX) setProductPage(nex)
+                else if(e2.touches[0].clientX - 100 > initialX) setProductPage(prev)
+            }
+
+            const drop = ()=>{
+                // document.removeEventListener("mousemove", move)
+                // document.removeEventListener("mouseup", drop)
+                document.removeEventListener("touchmove", move)
+                document.removeEventListener("touchend", drop)
+                document.removeEventListener("touchcancel", drop)
+            }
+
+            document.addEventListener("touchmove", move)
+            document.addEventListener("touchend", drop, {once: true})
+            document.addEventListener("touchcancel", drop, {once: true})
+            // document.addEventListener("mousemove", move)
+            // document.addEventListener("mouseup", drop, {once: true})
+        }
         return <section className='picker-section'>
             <Router/>
-            <div className='product-picker' id='product-picker'>
+            <div className='product-picker' onTouchStart={drag} id='product-picker'>
                 {Table !== undefined && RenderProducts(ProductPage)}
             </div>
             <button 
