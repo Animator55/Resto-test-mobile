@@ -1,7 +1,7 @@
 import React from 'react'
 import { Item, Table, pagesRouter } from '../vite-env'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowCircleLeft, faBottleWater, faCheck, faCookie, faDrumstickBite, faIceCream, faMartiniGlassCitrus, faMinus, faPen, faPlateWheat, faPlus, faTrash, faWineBottle } from '@fortawesome/free-solid-svg-icons'
+import { faArrowCircleLeft, faBottleWater, faCheck, faCookie, faDrumstickBite, faIceCream, faMartiniGlassCitrus, faMinus, faPen, faPlateWheat, faPlus, faWineBottle, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { products } from '../assets/products'
 import EditItemPop from './EditItemPop'
 
@@ -237,7 +237,7 @@ export default function TableBuys({Table, editTable}: Props) {
                     </button>
                 })}
                 <button onClick={()=>{setSelectedProds([]); setProductsVis(false)}}>
-                    <FontAwesomeIcon icon={faTrash}/>
+                    <FontAwesomeIcon icon={faXmark}/>
                     <p>Descartar</p>
                 </button>
             </nav>

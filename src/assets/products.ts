@@ -160,13 +160,13 @@ export const products: productsType = {
     "Bebidas": [
         {
           _id: "b.000",
-          price: 900,
+          price: 950,
           name: "Agua Mineral",
           type: "Bebidas"
         },
         {
           _id: "b.001",
-          price: 900,
+          price: 950,
           name: "Agua c/g",
           type: "Bebidas"
         },
@@ -178,39 +178,39 @@ export const products: productsType = {
         },
         {
           _id: "b.003",
-          price: 1400,
+          price: 1500,
           name: "Gaseosas (CocaCola)",
           type: "Bebidas"
         },
 
         {
           _id: "b.004",
-          price: 1400,
+          price: 1800,
           name: "Corona",
           type: "Bebidas"
         },
         {
           _id: "b.005",
-          price: 1600,
+          price: 1950,
           name: "Heinneken",
           type: "Bebidas"
         },
 
         {
           _id: "b.006",
-          price: 4900,
+          price: 5900,
           name: "Black Label",
           type: "Bebidas"
         },
         {
           _id: "b.007",
-          price: 3800,
+          price: 4900,
           name: "Chivas Regal 12",
           type: "Bebidas"
         },
         {
           _id: "b.008",
-          price: 2400,
+          price: 2800,
           name: "Jameson",
           type: "Bebidas"
         },
@@ -295,32 +295,32 @@ export const products: productsType = {
         {
             _id: "t.000",
             name: "Pueblo",
-            price: 1600,
+            price: 1700,
             type: "Tragos"
         },
         {
             _id: "t.001",
             name: "Pugliese",
-            price: 1600,
+            price: 1700,
             type: "Tragos"
         },
         {
             _id: "t.002",
             name: "Bianco Ton.",
-            price: 1650,
+            price: 1700,
             type: "Tragos"
         },
         {
             _id: "t.003",
             name: "Hemingway",
-            price: 1650,
+            price: 1750,
             type: "Tragos"
         },
 
         {
             _id: "t.004",
             name: "Club",
-            price: 1700,
+            price: 1800,
             type: "Tragos"
         },
         {
@@ -338,64 +338,64 @@ export const products: productsType = {
         {
             _id: "t.007",
             name: "Negroni",
-            price: 1700,
+            price: 2500,
             type: "Tragos"
         },
 
         {
             _id: "t.008",
             name: "Julep",
-            price: 1700,
+            price: 1800,
             type: "Tragos"
         },
         {
             _id: "t.009",
             name: "Cynarazo",
-            price: 1700,
+            price: 1800,
             type: "Tragos"
         },
         {
             _id: "t.010",
             name: "Americano de Botica",
-            price: 1700,
+            price: 1800,
             type: "Tragos"
         },
 
         {
             _id: "t.011",
             name: "Bombay Gin Tonic",
-            price: 2700,
+            price: 3900,
             type: "Tragos"
         },
         {
             _id: "t.012",
             name: "Beffeater/Tanqueray Gin Tonic",
-            price: 2700,
+            price: 3200,
             type: "Tragos"
         },
         {
             _id: "t.013",
             name: "Partha Gin Tonic",
-            price: 1900,
+            price: 2200,
             type: "Tragos"
         },
 
         {
             _id: "t.014",
             name: "Fernet",
-            price: 1800,
+            price: 2500,
             type: "Tragos"
         },
         {
             _id: "t.015",
             name: "Campari",
-            price: 1800,
+            price: 2500,
             type: "Tragos"
         },
         {
             _id: "t.016",
             name: "Aperol",
-            price: 1900,
+            price: 2200,
             type: "Tragos"
         },
     ],
