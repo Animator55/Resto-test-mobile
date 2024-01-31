@@ -7,28 +7,18 @@ import TopBar from './components/TopBar'
 import Historial from './components/Historial'
 import AddTable from './components/AddTable'
 import PayPaper from './components/PayPaper'
+import LoadingPop from './components/LoadingPop'
+import Results from './components/Results'
 
 const defaultTables: TablesType = {
 }
 
 let lastChange: string | undefined
 
-
-// const checkTableExist = (Tables: TablesType, number: string)=>{
-//   let result : boolean = false
-
-//   for(const key in Tables) {
-//       if(Tables[key].number === Number(number)) {
-//           result = true
-//           break
-//       }
-//   }    
-//   return result
-// }
-
 export default function App() {
   const [paydisplay, setDisplay] = React.useState<undefined | any>(undefined)
   const [popUp, setPopUp] = React.useState<boolean>(false)
+  const [loading, setloading] = React.useState<string>("")
   const [page, setPage] = React.useState("list")
   const [Tables, setTables] = React.useState(defaultTables)
   const [selectedTable, setSelected] = React.useState<string | undefined>()
@@ -75,6 +65,7 @@ export default function App() {
       let value = JSON.stringify(Tables[id])
       storage.setItem(id, value);
     }
+    setloading("guardar")
   }
   const archivate = (id: string, boolean: boolean)=>{
     setTables({...Tables, [id]: {...Tables[id], state: boolean ? "active":"deleted"}})
@@ -113,11 +104,13 @@ export default function App() {
     "table": <TableBuys editTable={editTable} Table={selectedTable !== undefined ? Tables[selectedTable] : undefined}/>,
     "historial": <Historial 
       historial={selectedHistorial !== undefined  ? Tables[selectedHistorial] : undefined}
+    />,
+    "results": <Results 
+      Tables={Tables}
     />
   }
 
   const handleCreateTable = (val: string)=>{
-    //checkTableExist(Tables, val)
     if(!val || val === "") return
     createTable(val)
     setPopUp(false)
@@ -161,9 +154,15 @@ export default function App() {
       <section className='sub-content'>
         {paydisplay !== undefined && <PayPaper content={paydisplay} close={()=>{setDisplay(undefined)}}/>}
         {popUp && <AddTable close={()=>{setPopUp(false)}} confirm={handleCreateTable}/>}
+        {loading !== "" && <LoadingPop objetive={loading} close={()=>{setloading("")}}/>}
         <TopBar 
           save={save} 
+          clear={()=>{
+            window.localStorage.clear()
+            setloading("borrar")
+          }}
           TableList={()=>{setPage("list"); setSelected(undefined)}}
+          results={()=>{setPage("results"); setSelected(undefined)}}
           page={page}
           selectedTable={selectedTable !== undefined ? Tables[selectedTable]: undefined}
           setPopUp={setPopUp}

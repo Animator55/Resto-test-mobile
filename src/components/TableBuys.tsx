@@ -15,6 +15,8 @@ type resRoute = {
 
 let lastChange: undefined | any = undefined
 
+let prevPage: number = -1
+
 export default function TableBuys({Table, editTable}: Props) {
     const [productsVis, setProductsVis] = React.useState<boolean>(false)
     const [selectedProds, setSelectedProds] = React.useState<Item[]>([])
@@ -259,38 +261,52 @@ export default function TableBuys({Table, editTable}: Props) {
                 </button>
             </nav>
         }
-        const drag = (e: React.TouchEvent<HTMLDivElement>)=>{
-            console.log("touchstart", e)
+        let indexPages = Object.keys(pages)
+        let actual =indexPages.indexOf(ProductPage)
+        let nex = actual+1 === indexPages.length ? indexPages[actual] : indexPages[actual+1]
+        let prev = actual-1 < 0 ? indexPages[0] : indexPages[actual-1]
 
+        const drag = (e: React.TouchEvent<HTMLDivElement>)=>{
             let initialX = e.touches[0].pageX
-            let indexPages = Object.keys(pages)
-            let actual =indexPages.indexOf(ProductPage)
-            let nex = actual+1 === indexPages.length ? indexPages[actual] : indexPages[actual+1]
-            let prev = actual-1 < 0 ? indexPages[0] : indexPages[actual-1]
+            let list = document.querySelector(".product-picker") as HTMLDivElement
+            if(!list) return
 
             const move = (e2: TouchEvent)=>{
-                if(e2.touches[0].clientX + 100 < initialX) setProductPage(nex)
-                else if(e2.touches[0].clientX - 100 > initialX) setProductPage(prev)
+                list.style.left = e2.touches[0].clientX - initialX + "px"
+                if(e2.touches[0].clientX > initialX+ 300 ) {
+                    document.removeEventListener("touchmove", move)
+                    prevPage = actual
+                    setProductPage(prev)
+                }
+                else if(e2.touches[0].clientX < initialX- 300 ) {
+                    document.removeEventListener("touchmove", move)
+                    prevPage = actual
+                    setProductPage(nex)
+                }
             }
 
             const drop = ()=>{
-                // document.removeEventListener("mousemove", move)
-                // document.removeEventListener("mouseup", drop)
                 document.removeEventListener("touchmove", move)
                 document.removeEventListener("touchend", drop)
                 document.removeEventListener("touchcancel", drop)
+
+                list.style.transition = "left 300ms"
+                list.style.left = "0px"
+                setTimeout(()=>{
+                    list.style.transition = ""
+                }, 300)
             }
 
             document.addEventListener("touchmove", move)
             document.addEventListener("touchend", drop, {once: true})
             document.addEventListener("touchcancel", drop, {once: true})
-            // document.addEventListener("mousemove", move)
-            // document.addEventListener("mouseup", drop, {once: true})
         }
         return <section className='picker-section'>
             <Router/>
-            <div className='product-picker' onTouchStart={drag} id='product-picker'>
-                {Table !== undefined && RenderProducts(ProductPage)}
+            <div className='product-paging'>
+                <div className='product-picker' onTouchStart={drag} id='product-picker'>
+                    {Table !== undefined && RenderProducts(ProductPage)}
+                </div>
             </div>
             <button 
                 className='select-confirm' 
@@ -311,6 +327,20 @@ export default function TableBuys({Table, editTable}: Props) {
         picker.scrollTo({left: 0, top: lastChange})
         lastChange = undefined
     }, [selectedProds])
+
+    React.useEffect(()=>{
+        if(prevPage === -1) return
+        let indexPages = Object.keys(pages)
+        let actual =indexPages.indexOf(ProductPage)
+        let list = document.querySelector(".product-picker") as HTMLDivElement
+
+        if(actual === prevPage || !list) return
+        if(actual < prevPage) list.style.animation = "slide-from-left 300ms forwards"
+        else if(actual > prevPage) list.style.animation = "slide-from-right 300ms forwards"
+        setTimeout(()=>{
+            list.style.animation = ""
+        }, 300)
+    }, [ProductPage])
     
     return <section className='table-display'>
         {!productsVis ? <div>

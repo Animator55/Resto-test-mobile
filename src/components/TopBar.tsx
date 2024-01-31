@@ -1,9 +1,10 @@
-import { faExpand, faList, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faExpand, faList, faPlus, faWarning } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React from "react"
 import { Table } from "../vite-env"
 import { faFolder } from "@fortawesome/free-solid-svg-icons/faFolder"
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons/faFloppyDisk"
+import { faListCheck } from "@fortawesome/free-solid-svg-icons/faListCheck"
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons/faEllipsisVertical"
 
 type Props = {
   save: Function
@@ -13,38 +14,58 @@ type Props = {
   selectedTable: Table | undefined
   setPopUp: Function
   toggleFilter: Function
+  clear: Function
+  results: Function
   filter: string
 }
 
-export default function TopBar({save, TableList, page, pay, selectedTable, setPopUp, toggleFilter, filter}: Props) {
-  const [pop, setPop] = React.useState<boolean>(false)
-
-  const ClosePopUp = ()=>{
-    return <section className="pop-background">
-      <div className="pop">
-        <h2>Cerrar Registro</h2>
-        <hr/>
-        <div>
-          <button onClick={()=>{save()}}>Guardar </button>
-          <button onClick={()=>{setPop(false)}}>Cancelar</button>
-        </div>
-      </div>
-    </section>
-  }
-  
+export default function TopBar({save, clear, results, TableList, page, pay, selectedTable, setPopUp, toggleFilter, filter}: Props) {
   const fullscreen = ()=>{
     let elem = document.getElementById('main')
     if(!elem) return
     if(elem.requestFullscreen) elem.requestFullscreen()
-    // else if(elem.webkitRequestFullscreen) elem.webkitRequestFullscreen()
+  }
+  const Span = ()=>{
+    const openSpan = (e: React.MouseEvent)=>{
+      let span = e.currentTarget.nextElementSibling as HTMLSpanElement
+      span.classList.toggle("expanded")
+    }
+    const blurSpan = (e: React.FocusEvent)=>{
+      let span = e.currentTarget.nextElementSibling as HTMLSpanElement
+      setTimeout(()=>{
+        span.classList.remove("expanded")
+      }, 100)
+    }
+
+    return <div className="span-wrap">
+      <button className="expander" onClick={openSpan} onBlur={blurSpan}>
+        <FontAwesomeIcon icon={faEllipsisVertical}/>
+      </button>
+
+      <span className="top-span">
+        <button onClick={()=>{save()}}>
+          <FontAwesomeIcon icon={faFloppyDisk}/>
+          <p>Guardar</p>
+        </button>
+        <button onClick={()=>{clear()}}>
+          <FontAwesomeIcon icon={faWarning}/>
+          <p>Borrar datos</p>
+        </button>
+
+        <button onClick={()=>{fullscreen()}}>
+          <FontAwesomeIcon icon={faExpand}/>
+          <p>Fullscreen</p>
+        </button>
+        <button onClick={()=>{results()}}>
+          <FontAwesomeIcon icon={faListCheck}/>
+          <p>Resultados</p>
+        </button>
+      </span>
+    </div>
   }
   return <nav className="topbar">
-    {pop && <ClosePopUp/>}
     <button onClick={()=>{TableList()}}>
       <FontAwesomeIcon icon={faList}/>
-    </button>
-    <button onClick={()=>{fullscreen()}}>
-      <FontAwesomeIcon icon={faExpand}/>
     </button>
     {page === "table" && <>
       <h4>{selectedTable !== undefined && "Mesa " + selectedTable.number}</h4>
@@ -52,10 +73,6 @@ export default function TopBar({save, TableList, page, pay, selectedTable, setPo
     </>
     }
     {page === "list" && <>
-      <button className="save" onClick={()=>{save()}}>
-        <FontAwesomeIcon icon={faFloppyDisk}/>
-        <p>Guardar</p>
-      </button>
       <button className="toggle-filter" onClick={()=>{toggleFilter()}}>
         <FontAwesomeIcon icon={faFolder}/>
         <p>{filter === "active" ? "Activas" : "Borradas"}</p>
@@ -65,11 +82,6 @@ export default function TopBar({save, TableList, page, pay, selectedTable, setPo
       </button>
     </>
     }
-    {/* <button onClick={()=>{}}>
-      <FontAwesomeIcon icon={faDatabase}/>
-    </button> */}
-    {/* <button onClick={()=>{setPop(true)}}>
-      <FontAwesomeIcon icon={faXmark}/>
-    </button> */}
+    <Span/>
   </nav>
 }
