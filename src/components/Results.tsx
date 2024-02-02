@@ -22,7 +22,7 @@ export default function Results({Tables}: Props) {
         for(const key in Tables) {
             let tabl = Tables[key]
     
-            let item = <div className={tabl.state === "active" ? 'table-button active-table' : 'table-button unactive-table'}>
+            let item = <div key={Math.random()} className={tabl.state === "active" ? 'table-button active-table' : 'table-button unactive-table'}>
                 <p>Mesa {tabl.number}</p>
                 <p>${calculateTotal(tabl.buys)}</p>
             </div>
