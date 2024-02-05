@@ -379,13 +379,6 @@ input {
   background-color: var(--cred);
 }
 
-/* .item-options > button:hover {
-  background-color: var(--cdarkgray);
-  border-radius: 50%;
-  scale: 1.2;
-  transition: background-color 200ms, scale 300ms;
-} */
-
 .table-buys-total {
   margin-top: auto;
 }
